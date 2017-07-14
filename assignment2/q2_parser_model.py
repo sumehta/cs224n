@@ -54,6 +54,9 @@ class ParserModel(Model):
         (Don't change the variable names)
         """
         ### YOUR CODE HERE
+        self.input_placeholder = tf.placeholder(tf.int32, (None, n_features))
+        self.labels_placeholder = tf.placeholder(tf.float32, (None, n_classes))
+        self.dropout_placeholder = tf.placeholder(tf.float32)
         ### END YOUR CODE
 
     def create_feed_dict(self, inputs_batch, labels_batch=None, dropout=1):
@@ -79,6 +82,8 @@ class ParserModel(Model):
             feed_dict: The feed dictionary mapping from placeholders to values.
         """
         ### YOUR CODE HERE
+        feed_dict = {self.input_placeholder: inputs_batch, self.labels_placeholder: labels_batch,
+         self.dropout_placeholder: dropout}
         ### END YOUR CODE
         return feed_dict
 
@@ -100,6 +105,11 @@ class ParserModel(Model):
             embeddings: tf.Tensor of shape (None, n_features*embed_size)
         """
         ### YOUR CODE HERE
+        pretrained_embeddings = self.pretrained_embeddings
+
+        # this gives a tensor of shape (None, n_features, embedding_size)
+        embeddings = tf.nn.embedding_lookup(pretrained_embeddings, self.input_placeholder)
+        tf.reshape(embeddings, (-1, n_features * embedding_size))
         ### END YOUR CODE
         return embeddings
 
@@ -130,6 +140,15 @@ class ParserModel(Model):
 
         x = self.add_embedding()
         ### YOUR CODE HERE
+        initializer = xavier_weight_init()
+        W = tf.Variable(initializer((n_features*embed_size, hidden_size)))
+        U = tf.Variable(initializer((hidden_size, n_classes)))
+        b1 = tf.Variable(np.zeros([hidden_size,]))
+        b2 = tf.Variable(np.zeros([n_classes]))
+
+        h = tf.nn.relu(tf.matmul(x, W) + b1)
+        h_drop = tf.nn.dropout(h, dropout_rate)
+        pred = tf.matmul(h_drop, U) + b27898765432123a365`876   `2``    `3q1```1`1`2132221``s1`1    `1`11``     w321``1---021`2`21
         ### END YOUR CODE
         return pred
 
@@ -170,6 +189,7 @@ class ParserModel(Model):
             train_op: The Op for training.
         """
         ### YOUR CODE HERE
+        train_op = tf.train.AdamOptimizer().minimize(loss)
         ### END YOUR CODE
         return train_op
 
