@@ -99,8 +99,18 @@ def minibatch_parse(sentences, model, batch_size):
                       contain the parse for sentences[i]).
     """
 
-    ### YOUR CODE HERE
-    ### END YOUR CODE
+    # ### YOUR CODE HERE
+    # partial_parses=[PartialParse(sentence) for sentence in sentences]
+    # unfinished_parses = partial_parses
+    # while unfinished_parses:
+    #     mini_batch = unfinished_parses[:batch_size]
+    #     for pp in mini_batch
+    #     pred = model.predict(pp)
+    #     pp.parse([pred])
+        
+
+
+    # ### END YOUR CODE
 
     return dependencies
 
